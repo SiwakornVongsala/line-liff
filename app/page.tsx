@@ -23,8 +23,8 @@ export default function Home() {
         const destinationUrl = window.location?.href;
         console.log('>>>> destinationUrl',destinationUrl)
         console.log("should login");
-        // liff.login({redirectUri: destinationUrl});
-        liff.login();
+        liff.login({redirectUri: destinationUrl});
+        // liff.login();
       }
     })();
   }, [profile.userId]);
