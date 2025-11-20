@@ -12,9 +12,13 @@ export default function Profile() {
   useEffect(() => {
     (async () => {
       try {
-        const liff = (await import("@line/liff")).default;
-        const a = await liff.ready;
+        await liff.init({ liffId });
+        console.log(">>>> init success", {});
+
+        await liff.ready;
+
         const profile = await liff.getProfile();
+
         setProfile(profile);
         console.log(">>>> profile", { profile });
       } catch (error) {
@@ -24,9 +28,21 @@ export default function Profile() {
   }, []);
 
   const getProfile = async (): Promise<any> => {
+    console.log('>>>> getProfile',{});
     try {
+      // const liff = (await import("@line/liff")).default;
+
+      // เผื่อยังไม่ init
+      // if (!liff.isInitialized()) {
+      //   await liff.init({ liffId });
+      // }
+      //
+      await liff.init({ liffId });
+      console.log(">>>> init success", {});
+
       const profile = await liff.getProfile();
       console.log(">>>> profile", { profile });
+
     } catch (error) {
       console.log(">>>> error", { error });
     }
