@@ -8,45 +8,37 @@ import liff from "@line/liff";
 const liffId = "2008377237-wKREJbek";
 export default function Profile() {
   const [profile, setProfile] = useState<any>({});
+  const [otherData, setOtherData] = useState<any>({});
 
   useEffect(() => {
     (async () => {
       try {
-        await liff.init({ liffId });
-        console.log(">>>> init success a", {});
-
+        // init liff
+        await liff.init({ liffId: liffId });
         await liff.ready;
 
+        // get Url params  (orgId)
+        const params = new URLSearchParams(window.location.search);
+        const orgId = params.get("orgId");
+        console.log("orgid from URL =", orgId);
+
+        // get profie
         const profile = await liff.getProfile();
 
+        // get email
+        const idToken = liff.getDecodedIDToken();
+        console.log(">>>> idToken", { idToken });
+
+        // set datas
+        setOtherData({ ...idToken, orgId });
         setProfile(profile);
         console.log(">>>> profile", { profile });
+
       } catch (error) {
         console.log(">>>> error", { error });
       }
     })();
   }, []);
-
-  /*const getProfile = async (): Promise<any> => {
-    console.log('>>>> getProfile',{});
-    try {
-      // const liff = (await import("@line/liff")).default;
-
-      // เผื่อยังไม่ init
-      // if (!liff.isInitialized()) {
-      //   await liff.init({ liffId });
-      // }
-      //
-      await liff.init({ liffId });
-      console.log(">>>> init success b", {});
-
-      const profile = await liff.getProfile();
-      console.log(">>>> profile", { profile });
-
-    } catch (error) {
-      console.log(">>>> error", { error });
-    }
-  };*/
 
   return (
     <section>
@@ -54,14 +46,6 @@ export default function Profile() {
         <title>My Profile</title>
       </Head>
       <h1>Profile</h1>
-      {/* <button */}
-      {/*   type="button" */}
-      {/*   onClick={async (): Promise<any> => { */}
-      {/*     await getProfile(); */}
-      {/*   }} */}
-      {/* > */}
-      {/*   get profile */}
-      {/* </button> */}
       <div>
         {profile?.pictureUrl && (
           <Image
@@ -71,7 +55,9 @@ export default function Profile() {
             height={500}
           />
         )}
-        <div>Name: {profile.displayName}</div>
+        <div>Name: {profile?.displayName}</div>
+        <div>Email: {otherData?.email}</div>
+        <div>OrgId: {otherData?.orgId}</div>
       </div>
     </section>
   );

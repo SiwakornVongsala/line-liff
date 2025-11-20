@@ -11,20 +11,14 @@ export default function Home() {
 
   useEffect(() => {
     (async () => {
-      console.log("liff");
-      try {
-        const a =await liff.init({ liffId });
-        console.log('>>>> a',{a});
-
-      } catch (error) {
-        console.log("liff init error", error);
-      }
+      await liff.init({ liffId: liffId });
       if (!liff.isLoggedIn()) {
-        console.log("should login");
-        liff.login();
+        // temp Url params
+        const destinationUrl = window.location?.href;
+
+        liff.login({ redirectUri: destinationUrl });
       }
     })();
   }, [profile.userId]);
-
-  return <p>landing page...</p>;
+  return <></>;
 }
