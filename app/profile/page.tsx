@@ -13,16 +13,24 @@ export default function Profile() {
     (async () => {
       try {
         const liff = (await import("@line/liff")).default;
-       const a= await liff.ready;
+        const a = await liff.ready;
         const profile = await liff.getProfile();
         setProfile(profile);
-        console.log('>>>> profile',{profile});
-        console.log('>>>> profile',{profile});
+        console.log(">>>> profile", { profile });
       } catch (error) {
         console.log(">>>> error", { error });
       }
     })();
   }, []);
+
+  const getProfile = async (): Promise<any> => {
+    try {
+      const profile = await liff.getProfile();
+      console.log(">>>> profile", { profile });
+    } catch (error) {
+      console.log(">>>> error", { error });
+    }
+  };
 
   return (
     <section>
@@ -30,6 +38,14 @@ export default function Profile() {
         <title>My Profile</title>
       </Head>
       <h1>Profile</h1>
+      <button
+        type="button"
+        onClick={async (): Promise<any> => {
+          await getProfile();
+        }}
+      >
+        get profile
+      </button>
       <div>
         {profile.pictureUrl && (
           <Image
