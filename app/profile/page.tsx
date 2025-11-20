@@ -13,7 +13,7 @@ export default function Profile() {
     (async () => {
       try {
         await liff.init({ liffId });
-        console.log(">>>> init success", {});
+        console.log(">>>> init success a", {});
 
         await liff.ready;
 
@@ -27,7 +27,7 @@ export default function Profile() {
     })();
   }, []);
 
-  const getProfile = async (): Promise<any> => {
+  /*const getProfile = async (): Promise<any> => {
     console.log('>>>> getProfile',{});
     try {
       // const liff = (await import("@line/liff")).default;
@@ -38,7 +38,7 @@ export default function Profile() {
       // }
       //
       await liff.init({ liffId });
-      console.log(">>>> init success", {});
+      console.log(">>>> init success b", {});
 
       const profile = await liff.getProfile();
       console.log(">>>> profile", { profile });
@@ -46,7 +46,7 @@ export default function Profile() {
     } catch (error) {
       console.log(">>>> error", { error });
     }
-  };
+  };*/
 
   return (
     <section>
@@ -54,19 +54,19 @@ export default function Profile() {
         <title>My Profile</title>
       </Head>
       <h1>Profile</h1>
-      <button
-        type="button"
-        onClick={async (): Promise<any> => {
-          await getProfile();
-        }}
-      >
-        get profile
-      </button>
+      {/* <button */}
+      {/*   type="button" */}
+      {/*   onClick={async (): Promise<any> => { */}
+      {/*     await getProfile(); */}
+      {/*   }} */}
+      {/* > */}
+      {/*   get profile */}
+      {/* </button> */}
       <div>
-        {profile.pictureUrl && (
+        {profile?.pictureUrl && (
           <Image
-            src={profile.pictureUrl}
-            alt={profile.displayName}
+            src={profile?.pictureUrl}
+            alt={profile?.displayName}
             width={500}
             height={500}
           />
