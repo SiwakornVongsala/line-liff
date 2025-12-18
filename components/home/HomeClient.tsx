@@ -6,29 +6,30 @@ import { useSearchParams } from "next/navigation";
 
 import { getLiffIdFromLiffState } from "@/app/lib/liff";
 
+export const liffId = '2008377237-wKREJbek';
 export default function HomeClient() {
   const [error, setError] = useState<string | null>("");
-  const [liffId, setLiffId] = useState<string | null>(null);
+  // const [liffId, setLiffId] = useState<string | null>(null);
   const searchParams = useSearchParams();
 
-  useEffect(() => {
-    (async (): Promise<void> => {
-      const id = getLiffIdFromLiffState(searchParams);
-      if (id) {
-        setLiffId(id);
-      }
-    })();
-  }, [searchParams]);
+  // useEffect(() => {
+  //   (async (): Promise<void> => {
+  //     const id = getLiffIdFromLiffState(searchParams);
+  //     if (id) {
+  //       setLiffId(id);
+  //     }
+  //   })();
+  // }, [searchParams]);
 
   useEffect(() => {
     (async (): Promise<void> => {
-      if (!liffId) {
-        console.log("no valid liffId found in link param");
-        return;
-      }
+      // if (!liffId) {
+      //   console.log("no valid liffId found in link param");
+      //   return;
+      // }
       try {
         console.log("liff init using", liffId);
-        await liff.init({ liffId });
+        await liff.init({ liffId:liffId });
       } catch (error) {
         console.log("liff init error", error);
       }
@@ -38,7 +39,7 @@ export default function HomeClient() {
         liff.login({ redirectUri: destinationUrl });
       }
     })();
-  }, [liffId]);
+  }, []);
 
   if (error) {
     return <p>{error}</p>;

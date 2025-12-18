@@ -7,31 +7,32 @@ import { useSearchParams } from "next/navigation";
 import liff from "@line/liff";
 
 import { getLiffIdFromLiffState } from "@/app/lib/liff";
+import { liffId } from "../home/HomeClient";
 
 export default function ProfileClient() {
   const [error, setError] = useState<string | null>("");
   const [profile, setProfile] = useState<any>({});
   const [otherData, setOtherData] = useState<any>({});
-  const [liffId, setLiffId] = useState<string | null>(null);
+  // const [liffId, setLiffId] = useState<string | null>(null);
   const searchParams = useSearchParams();
 
-  useEffect(() => {
-    (async (): Promise<void> => {
-      const id = getLiffIdFromLiffState(searchParams);
-      if (id) {
-        setLiffId(id);
-      }
-    })();
-  }, [searchParams]);
+  // useEffect(() => {
+  //   (async (): Promise<void> => {
+  //     const id = getLiffIdFromLiffState(searchParams);
+  //     if (id) {
+  //       setLiffId(id);
+  //     }
+  //   })();
+  // }, [searchParams]);
 
   useEffect(() => {
     (async () => {
-      if (!liffId) {
-        console.log("no valid liffId found in link param");
-        return;
-      }
+      // if (!liffId) {
+      //   console.log("no valid liffId found in link param");
+      //   return;
+      // }
       try {
-        await liff.init({ liffId });
+        await liff.init({ liffId: liffId });
         await liff.ready;
 
         const params = new URLSearchParams(window.location.search);
@@ -49,7 +50,7 @@ export default function ProfileClient() {
         setError("Failed to fetch profile");
       }
     })();
-  }, [liffId]);
+  }, []);
 
   if (error) {
     return <p>{error}</p>;
