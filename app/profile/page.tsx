@@ -4,21 +4,35 @@ import { useEffect, useState } from "react";
 import Head from "next/head";
 import Image from "next/image";
 import liff from "@line/liff";
-import { extractLiffIdFromLink } from "../lib/liff";
+import { extractLiffIdFromLink, getLiffIdFromLiffState } from "../lib/liff";
+import { useSearchParams } from "next/navigation";
 
 export default function Profile() {
 
   const [error, setError] = useState<string | null>('');
   const [profile, setProfile] = useState<any>({});
   const [otherData, setOtherData] = useState<any>({});
+  const [liffId, setLiffId] = useState<any>(null);
+
+  const searchParams = useSearchParams();
+  useEffect(() => {
+    (async (): Promise<void> => {
+      const liffId = getLiffIdFromLiffState(searchParams);
+      if (liffId) {
+        setLiffId(liffId);
+      }
+    })();
+  }, [searchParams]);
 
   useEffect(() => {
     (async () => {
+      if (!liffId) {
+        // setError("no valid liffId found in link param");
+        console.log("no valid liffId found in link param");
+        return;
+      }
       try {
         // init liff
-        const params = new URLSearchParams(window.location.search);
-        const linkFromQuery = params.get("link");
-        const liffId = extractLiffIdFromLink(linkFromQuery);
         if (!liffId) {
           console.log("no valid liffId found in link param");
           return;
@@ -28,6 +42,7 @@ export default function Profile() {
 
         // get Url params  (orgId)
         // reuse params from above to retrieve orgId after init
+        const params = new URLSearchParams(window.location.search);
         const orgId = params.get("orgId");
         console.log("orgid from URL =", orgId);
 
@@ -47,7 +62,7 @@ export default function Profile() {
         console.log(">>>> error", { error });
       }
     })();
-  }, []);
+  }, [liffId]);
 
   if (error) {
     <p>{error}</p>;
