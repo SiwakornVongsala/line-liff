@@ -4,9 +4,11 @@ import { useEffect, useState } from "react";
 import Head from "next/head";
 import Image from "next/image";
 import liff from "@line/liff";
+import { extractLiffIdFromLink } from "../lib/liff";
 
-const liffId = "2008377237-wKREJbek";
 export default function Profile() {
+
+  const [error, setError] = useState<string | null>('');
   const [profile, setProfile] = useState<any>({});
   const [otherData, setOtherData] = useState<any>({});
 
@@ -14,11 +16,18 @@ export default function Profile() {
     (async () => {
       try {
         // init liff
-        await liff.init({ liffId: liffId });
+        const params = new URLSearchParams(window.location.search);
+        const linkFromQuery = params.get("link");
+        const liffId = extractLiffIdFromLink(linkFromQuery);
+        if (!liffId) {
+          console.log("no valid liffId found in link param");
+          return;
+        }
+        await liff.init({ liffId });
         await liff.ready;
 
         // get Url params  (orgId)
-        const params = new URLSearchParams(window.location.search);
+        // reuse params from above to retrieve orgId after init
         const orgId = params.get("orgId");
         console.log("orgid from URL =", orgId);
 
@@ -39,6 +48,10 @@ export default function Profile() {
       }
     })();
   }, []);
+
+  if (error) {
+    <p>{error}</p>;
+  }
 
   return (
     <section>
