@@ -5,14 +5,12 @@ import Image from "next/image";
 import { useSearchParams } from "next/navigation";
 import liff from "@line/liff";
 
-
 import { liffId } from "../home/HomeClient";
 import FancySpinner from "../Loading/loading";
 import Loading from "../Loading/loading";
 import { getLiffIdFromLiffState } from "@/app/lib/liff";
 
 export default function ProfileClient() {
-
   const search = typeof window !== "undefined" ? window.location.search : "";
   const params = useMemo(() => new URLSearchParams(search), [search]);
   const type = params.get("type"); // person | null
@@ -25,7 +23,7 @@ export default function ProfileClient() {
   const ticket = params.get("ticket"); // 0 | 1
   const replaceSalesOwner = params.get("replaceSalesOwner"); // 0 | 1
 
-  const handleFlow =async ():Promise<void> =>{ 
+  const handleFlow = async (): Promise<void> => {
     console.log(">>>log  2 profile", {
       type,
       orgId,
@@ -39,9 +37,7 @@ export default function ProfileClient() {
     });
     // const res = getLiffIdFromLiffState(params);
     // console.log(">>>>>>> res", { res });
-    
-
-  }
+  };
 
   useEffect(() => {
     (async () => {
@@ -51,7 +47,7 @@ export default function ProfileClient() {
 
         const profile = await liff.getProfile();
         const idToken = liff.getDecodedIDToken();
-        console.log(">>>> profile", { profile ,idToken});
+        console.log(">>>> profile", { profile, idToken });
 
         await handleFlow();
       } catch (error) {
@@ -60,12 +56,24 @@ export default function ProfileClient() {
     })();
   }, []);
 
-  return <p>index</p>
+  const openChatOA = () => {
+    liff.openWindow({
+      url: "https://line.me/R/ti/p/1656885749",
+      external: false, // เปิดใน LINE
+    });
+  };
+  return (
+    <p>
+      index
+      <button type="button" onClick={openChatOA}>
+        go to chat
+      </button>
+    </p>
+  );
 
   return (
     <div className="fixed inset-0 z-9999 m-auto h-full w-full bg-white/50 overflow-visible">
       <Loading />
     </div>
   );
-
 }
