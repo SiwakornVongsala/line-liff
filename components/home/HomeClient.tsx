@@ -4,7 +4,8 @@ import { useEffect } from "react";
 import liff from "@line/liff";
 import FancySpinner from "../Loading/loading";
 
-export const liffId = "2008377237-wKREJbek";
+// export const liffId = "2008377237-wKREJbek"; // liff
+export const liffId = "2008726614-UvZluZly"; // mini app
 
 export default function HomeClient() {
   useEffect(() => {

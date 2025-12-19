@@ -5,6 +5,7 @@ import Image from "next/image";
 import { useSearchParams } from "next/navigation";
 import liff from "@line/liff";
 
+
 import { liffId } from "../home/HomeClient";
 import FancySpinner from "../Loading/loading";
 import Loading from "../Loading/loading";
@@ -60,6 +61,7 @@ export default function ProfileClient() {
   }, []);
 
   return <p>index</p>
+
   return (
     <div className="fixed inset-0 z-9999 m-auto h-full w-full bg-white/50 overflow-visible">
       <Loading />

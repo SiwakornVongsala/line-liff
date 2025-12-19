@@ -1,4 +1,4 @@
-import ProfileClient from "@/components/index/ProfileClient";
+import ProfileClient from "@/components/profile/ProfileClient";
 import { Suspense } from "react";
 
 
