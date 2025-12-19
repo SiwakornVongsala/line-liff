@@ -58,17 +58,18 @@ export default function ProfileClient() {
 
   const openChatOA = () => {
     liff.openWindow({
-      url: "https://line.me/R/ti/p/1656885749",
+      url: "https://line.me/R/ti/p/@593weuru",
       external: false, // เปิดใน LINE
     });
   };
   return (
-    <p>
+    <div>
       index
+
       <button type="button" onClick={openChatOA}>
         go to chat
       </button>
-    </p>
+    </div>
   );
 
   return (
