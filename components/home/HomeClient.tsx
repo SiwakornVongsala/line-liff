@@ -1,49 +1,34 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import liff from "@line/liff";
-import { useSearchParams } from "next/navigation";
+import FancySpinner from "../Loading/loading";
 
-import { getLiffIdFromLiffState } from "@/app/lib/liff";
+export const liffId = "2008377237-wKREJbek";
 
-export const liffId = '2008377237-wKREJbek';
 export default function HomeClient() {
-  const [error, setError] = useState<string | null>("");
-  // const [liffId, setLiffId] = useState<string | null>(null);
-  const searchParams = useSearchParams();
-
-  // useEffect(() => {
-  //   (async (): Promise<void> => {
-  //     const id = getLiffIdFromLiffState(searchParams);
-  //     if (id) {
-  //       setLiffId(id);
-  //     }
-  //   })();
-  // }, [searchParams]);
-
   useEffect(() => {
     (async (): Promise<void> => {
-      // if (!liffId) {
-      //   console.log("no valid liffId found in link param");
-      //   return;
-      // }
       try {
         console.log("liff init using", liffId);
-        await liff.init({ liffId:liffId });
+        await liff.init({ liffId: liffId });
       } catch (error) {
         console.log("liff init error", error);
       }
       if (!liff.isLoggedIn()) {
         const destinationUrl = window.location?.href;
         console.log("should login");
+        console.log(">>>>>>> destinationUrl", { destinationUrl });
+        // liff.login({ redirectUri: destinationUrl });
         liff.login({ redirectUri: destinationUrl });
+
       }
     })();
   }, []);
 
-  if (error) {
-    return <p>{error}</p>;
-  }
-
-  return <p>landing page...</p>;
+  return (
+    <div className="fixed inset-0 z-[9999] m-auto h-full w-full bg-white/50 overflow-visible">
+      <FancySpinner />
+    </div>
+  );
 }

@@ -1,80 +1,68 @@
 "use client";
-
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import Head from "next/head";
 import Image from "next/image";
 import { useSearchParams } from "next/navigation";
 import liff from "@line/liff";
 
-import { getLiffIdFromLiffState } from "@/app/lib/liff";
 import { liffId } from "../home/HomeClient";
+import FancySpinner from "../Loading/loading";
+import Loading from "../Loading/loading";
+import { getLiffIdFromLiffState } from "@/app/lib/liff";
 
 export default function ProfileClient() {
-  const [error, setError] = useState<string | null>("");
-  const [profile, setProfile] = useState<any>({});
-  const [otherData, setOtherData] = useState<any>({});
-  // const [liffId, setLiffId] = useState<string | null>(null);
-  const searchParams = useSearchParams();
 
-  // useEffect(() => {
-  //   (async (): Promise<void> => {
-  //     const id = getLiffIdFromLiffState(searchParams);
-  //     if (id) {
-  //       setLiffId(id);
-  //     }
-  //   })();
-  // }, [searchParams]);
+  const search = typeof window !== "undefined" ? window.location.search : "";
+  const params = useMemo(() => new URLSearchParams(search), [search]);
+  const type = params.get("type"); // person | null
+  const orgId = params.get("orgId");
+  const saleCodeId = params.get("saleCodeId");
+  const salesOwner = params.get("salesOwner");
+  const orgPer = params.get("orgPer");
+  const salesType = params.get("salesType");
+  const greet = params.get("greet"); // 0 | 1
+  const ticket = params.get("ticket"); // 0 | 1
+  const replaceSalesOwner = params.get("replaceSalesOwner"); // 0 | 1
+
+  const handleFlow =async ():Promise<void> =>{ 
+    console.log(">>>log  2 profile", {
+      type,
+      orgId,
+      saleCodeId,
+      salesOwner,
+      orgPer,
+      salesType,
+      greet,
+      ticket,
+      replaceSalesOwner,
+    });
+    // const res = getLiffIdFromLiffState(params);
+    // console.log(">>>>>>> res", { res });
+    
+
+  }
 
   useEffect(() => {
     (async () => {
-      // if (!liffId) {
-      //   console.log("no valid liffId found in link param");
-      //   return;
-      // }
       try {
         await liff.init({ liffId: liffId });
         await liff.ready;
 
-        const params = new URLSearchParams(window.location.search);
-        const orgId = params.get("orgId");
-        console.log("orgid from URL =", orgId);
-
         const profile = await liff.getProfile();
         const idToken = liff.getDecodedIDToken();
-
-        setOtherData({ ...idToken, orgId });
-        setProfile(profile);
         console.log(">>>> profile", { profile });
+
+        await handleFlow();
       } catch (error) {
         console.log(">>>> error", { error });
-        setError("Failed to fetch profile");
       }
     })();
   }, []);
 
-  if (error) {
-    return <p>{error}</p>;
-  }
-
   return (
-    <section>
-      <Head>
-        <title>My Profile</title>
-      </Head>
-      <h1>Profile</h1>
-      <div>
-        {profile?.pictureUrl && (
-          <Image
-            src={profile?.pictureUrl}
-            alt={profile?.displayName}
-            width={500}
-            height={500}
-          />
-        )}
-        <div>Name: {profile?.displayName}</div>
-        <div>Email: {otherData?.email}</div>
-        <div>OrgId: {otherData?.orgId}</div>
-      </div>
-    </section>
+    <div className="fixed inset-0 z-9999 m-auto h-full w-full bg-white/50 overflow-visible">
+      <Loading />
+    </div>
   );
+
 }
