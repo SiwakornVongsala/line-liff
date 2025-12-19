@@ -26,9 +26,10 @@ export default function HomeClient() {
     })();
   }, []);
 
-  return (
-    <div className="fixed inset-0 z-[9999] m-auto h-full w-full bg-white/50 overflow-visible">
-      <FancySpinner />
-    </div>
-  );
+  return <p>login</p>
+  // return (
+  //   <div className="fixed inset-0 z-9999 m-auto h-full w-full bg-white/50 overflow-visible">
+  //     <FancySpinner />
+  //   </div>
+  // );
 }

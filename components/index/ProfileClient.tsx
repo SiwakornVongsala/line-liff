@@ -50,7 +50,7 @@ export default function ProfileClient() {
 
         const profile = await liff.getProfile();
         const idToken = liff.getDecodedIDToken();
-        console.log(">>>> profile", { profile });
+        console.log(">>>> profile", { profile ,idToken});
 
         await handleFlow();
       } catch (error) {
@@ -59,6 +59,7 @@ export default function ProfileClient() {
     })();
   }, []);
 
+  return <p>index</p>
   return (
     <div className="fixed inset-0 z-9999 m-auto h-full w-full bg-white/50 overflow-visible">
       <Loading />
