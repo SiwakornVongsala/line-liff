@@ -12,19 +12,22 @@ export default function HomeClient() {
     (async (): Promise<void> => {
       try {
         const liffId = process.env.NEXT_PUBLIC_LINE_LIFF_ID || "";
-        console.log("liff init using liff id = ", liffId);
         await liff.init({ liffId: liffId });
+        const url = new URL(window.location.href);
+
+        // 🔑 เปลี่ยนเฉพาะ path
+        url.pathname = "/profile";
+
+        const redirectUri = url.toString();
+
+        console.log("LIFF redirectUri:", redirectUri);
+        if (!liff.isLoggedIn()) {
+          liff.login({ redirectUri: redirectUri });
+        } else {
+          window.location.replace(redirectUri);
+        }
       } catch (error) {
         console.log("liff init error", error);
-      }
-      if (!liff.isLoggedIn()) {
-        // const destinationUrl = window.location?.href;
-        const url = new URL(window.location.href);
-        url.pathname = "/profile";
-        const destinationUrl = url.toString();
-        console.log("should login");
-        console.log(">>>>>>> destinationUrl", { destinationUrl });
-        liff.login({ redirectUri: destinationUrl });
       }
     })();
   }, []);
