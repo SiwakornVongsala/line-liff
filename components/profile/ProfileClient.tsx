@@ -5,7 +5,7 @@ import Image from "next/image";
 import { useSearchParams } from "next/navigation";
 import liff from "@line/liff";
 
-import { liffId } from "../home/HomeClient";
+// import { liffId } from "../home/HomeClient";
 import FancySpinner from "../Loading/loading";
 import Loading from "../Loading/loading";
 import { getLiffIdFromLiffState } from "@/app/lib/liff";
@@ -35,13 +35,15 @@ export default function ProfileClient() {
       ticket,
       replaceSalesOwner,
     });
-    // const res = getLiffIdFromLiffState(params);
-    // console.log(">>>>>>> res", { res });
+
+
+
   };
 
   useEffect(() => {
     (async () => {
       try {
+        const liffId =process.env.NEXT_PUBLIC_LINE_LIFF_ID ||'';
         await liff.init({ liffId: liffId });
         await liff.ready;
 
