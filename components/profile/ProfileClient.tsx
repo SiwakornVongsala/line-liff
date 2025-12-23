@@ -9,6 +9,7 @@ import liff from "@line/liff";
 import FancySpinner from "../Loading/loading";
 import Loading from "../Loading/loading";
 import { getLiffIdFromLiffState } from "@/app/lib/liff";
+import { lineDropform } from "@/app/services/services";
 
 export default function ProfileClient() {
   const search = typeof window !== "undefined" ? window.location.search : "";
@@ -18,22 +19,44 @@ export default function ProfileClient() {
   const saleCodeId = params.get("saleCodeId");
   const salesOwner = params.get("salesOwner");
   const orgPer = params.get("orgPer");
+  const event = params.get("event");
   const salesType = params.get("salesType");
   const greet = params.get("greet"); // 0 | 1
   const ticket = params.get("ticket"); // 0 | 1
   const replaceSalesOwner = params.get("replaceSalesOwner"); // 0 | 1
+  const channelId = params.get("channelId"); // 0 | 1
 
-  const handleFlow = async (): Promise<void> => {
-    console.log(">>>log  2 profile", {
-      type,
-      orgId,
-      saleCodeId,
-      salesOwner,
-      orgPer,
-      salesType,
-      greet,
-      ticket,
-      replaceSalesOwner,
+  const handleFlow = async (lineData: any): Promise<void> => {
+    try {
+      const payload = {
+        params: {
+          type,
+          orgId,
+          saleCodeId,
+          salesOwner,
+          orgPer,
+          salesType,
+          greet,
+          ticket,
+          replaceSalesOwner,
+          event,
+        },
+        body: {
+          ...lineData,
+          channelId: channelId,
+        },
+      };
+      await lineDropform(payload);
+    } catch (error) {
+      console.log(">>>> error", { error });
+    }
+  };
+
+  const openChatOA = () => {
+    const lineOA = process.env.NEXT_PUBLIC_LINE_OA || "";
+    liff.openWindow({
+      url: `https://line.me/R/ti/p/${lineOA}`,
+      external: false, // เปิดใน LINE
     });
   };
 
@@ -47,30 +70,27 @@ export default function ProfileClient() {
         const profile = await liff.getProfile();
         const idToken = liff.getDecodedIDToken();
         console.log(">>>> profile", { profile, idToken });
-
-        await handleFlow();
+        const lineData = {
+          lineId: profile?.userId,
+          displayName: profile?.displayName,
+          pictureUrl: profile?.pictureUrl,
+        };
+        await handleFlow(lineData);
+        openChatOA();
       } catch (error) {
         console.log(">>>> error", { error });
       }
     })();
   }, []);
 
-  const openChatOA = () => {
-    const lineOA = process.env.NEXT_PUBLIC_LINE_OA || "";
-    liff.openWindow({
-      url: `https://line.me/R/ti/p/${lineOA}`,
-      external: false, // เปิดใน LINE
-    });
-  };
-
-  return (
-    <div>
-      index
-      <button type="button" onClick={openChatOA}>
-        go to chat
-      </button>
-    </div>
-  );
+  // return (
+  //   <div>
+  //     index
+  //     <button type="button" onClick={openChatOA}>
+  //       go to chat
+  //     </button>
+  //   </div>
+  // );
 
   return (
     <div className="fixed inset-0 z-9999 m-auto h-full w-full bg-white/50 overflow-visible">
