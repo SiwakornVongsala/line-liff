@@ -35,15 +35,12 @@ export default function ProfileClient() {
       ticket,
       replaceSalesOwner,
     });
-
-
-
   };
 
   useEffect(() => {
     (async () => {
       try {
-        const liffId =process.env.NEXT_PUBLIC_LINE_LIFF_ID ||'';
+        const liffId = process.env.NEXT_PUBLIC_LINE_LIFF_ID || "";
         await liff.init({ liffId: liffId });
         await liff.ready;
 
@@ -59,15 +56,16 @@ export default function ProfileClient() {
   }, []);
 
   const openChatOA = () => {
+    const lineOA = process.env.NEXT_PUBLIC_LINE_OA || "";
     liff.openWindow({
-      url: "https://line.me/R/ti/p/@593weuru",
+      url: `https://line.me/R/ti/p/${lineOA}`,
       external: false, // เปิดใน LINE
     });
   };
+
   return (
     <div>
       index
-
       <button type="button" onClick={openChatOA}>
         go to chat
       </button>

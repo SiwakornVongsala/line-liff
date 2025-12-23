@@ -11,27 +11,27 @@ export default function HomeClient() {
   useEffect(() => {
     (async (): Promise<void> => {
       try {
-        const liffId =process.env.NEXT_PUBLIC_LINE_LIFF_ID ||'';
-        console.log("liff init using liff id = " , liffId);
+        const liffId = process.env.NEXT_PUBLIC_LINE_LIFF_ID || "";
+        console.log("liff init using liff id = ", liffId);
         await liff.init({ liffId: liffId });
       } catch (error) {
         console.log("liff init error", error);
       }
       if (!liff.isLoggedIn()) {
-        const destinationUrl = window.location?.href;
+        // const destinationUrl = window.location?.href;
+        const url = new URL(window.location.href);
+        url.pathname = "/profile";
+        const destinationUrl = url.toString();
         console.log("should login");
         console.log(">>>>>>> destinationUrl", { destinationUrl });
-        // liff.login({ redirectUri: destinationUrl });
         liff.login({ redirectUri: destinationUrl });
-
       }
     })();
   }, []);
 
-  return <p>login</p>
-  // return (
-  //   <div className="fixed inset-0 z-9999 m-auto h-full w-full bg-white/50 overflow-visible">
-  //     <FancySpinner />
-  //   </div>
-  // );
+  return (
+    <div className="fixed inset-0 z-9999 m-auto h-full w-full bg-white/50 overflow-visible">
+      <FancySpinner />
+    </div>
+  );
 }
