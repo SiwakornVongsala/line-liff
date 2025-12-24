@@ -83,13 +83,13 @@ export default function ProfileClient() {
     })();
   }, []);
 
-  return (
-    <div>
-      <button type="button" onClick={openChatOA}>
-        go to chat
-      </button>
-    </div>
-  );
+  // return (
+  //   <div>
+  //     <button type="button" onClick={openChatOA}>
+  //       go to chat
+  //     </button>
+  //   </div>
+  // );
 
   return (
     <div className="fixed inset-0 z-9999 m-auto h-full w-full bg-white/50 overflow-visible">
