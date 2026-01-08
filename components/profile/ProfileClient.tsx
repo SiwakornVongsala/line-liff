@@ -25,6 +25,7 @@ export default function ProfileClient() {
   const ticket = params.get("ticket"); // 0 | 1
   const replaceSalesOwner = params.get("replaceSalesOwner"); // 0 | 1
   const channelId = params.get("channelId"); // 0 | 1
+  const [lineData, setLineData] = useState<any>();
 
   const handleFlow = async (lineData: any): Promise<void> => {
     try {
@@ -76,7 +77,8 @@ export default function ProfileClient() {
           pictureUrl: profile?.pictureUrl,
         };
         await handleFlow(lineData);
-        openChatOA();
+        setLineData(lineData)
+        // openChatOA();
       } catch (error) {
         console.log(">>>> error", { error });
       }
@@ -87,6 +89,9 @@ export default function ProfileClient() {
     <div>
       <button type="button" onClick={openChatOA}>
         go to chat (vercel swk)
+       <p>lineId:{lineData?.lineId}</p> 
+       <p>displayName:{lineData?.displayName}</p> 
+       <p>pictureUrl:{lineData?.pictureUrl}</p> 
       </button>
     </div>
   );
