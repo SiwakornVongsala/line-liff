@@ -1,14 +1,8 @@
 "use client";
-import { useCallback, useEffect, useMemo, useState } from "react";
-import Head from "next/head";
-import Image from "next/image";
-import { useSearchParams } from "next/navigation";
+import { useEffect, useMemo, useState } from "react";
 import liff from "@line/liff";
 
-// import { liffId } from "../home/HomeClient";
-import FancySpinner from "../Loading/loading";
 import Loading from "../Loading/loading";
-import { getLiffIdFromLiffState } from "@/app/lib/liff";
 import { lineDropform } from "@/app/services/services";
 
 export default function ProfileClient() {
@@ -25,7 +19,7 @@ export default function ProfileClient() {
   const ticket = params.get("ticket"); // 0 | 1
   const replaceSalesOwner = params.get("replaceSalesOwner"); // 0 | 1
   const channelId = params.get("channelId"); // 0 | 1
-  const [lineData, setLineData] = useState<any>();
+  // const [lineData, setLineData] = useState<any>();
 
   const handleFlow = async (lineData: any): Promise<void> => {
     try {
@@ -70,35 +64,37 @@ export default function ProfileClient() {
 
         const profile = await liff.getProfile();
         const idToken = liff.getDecodedIDToken();
-        console.log(">>>> profile", { profile, idToken });
+        // console.log(">>>> profile", { profile, idToken });
         const lineData = {
           lineId: profile?.userId,
           displayName: profile?.displayName,
           pictureUrl: profile?.pictureUrl,
         };
         await handleFlow(lineData);
-        setLineData(lineData)
-        // openChatOA();
+        // setLineData(lineData);
+
+        openChatOA();
       } catch (error) {
         console.log(">>>> error", { error });
       }
     })();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  return (
-    <div>
-      <button type="button" onClick={openChatOA}>
-        go to chat (vercel swk)
-       <p>lineId:{lineData?.lineId}</p> 
-       <p>displayName:{lineData?.displayName}</p> 
-       <p>pictureUrl:{lineData?.pictureUrl}</p> 
-      </button>
-    </div>
-  );
-
   // return (
-  //   <div className="fixed inset-0 z-9999 m-auto h-full w-full bg-white/50 overflow-visible">
-  //     <Loading />
+  //   <div>
+  //     <button type="button" onClick={openChatOA}>
+  //       go to chat (conx)
+  //     </button>
+  //     <p>lineId:{lineData?.lineId}</p>
+  //     <p>displayName:{lineData?.displayName}</p>
+  //     <p>pictureUrl:{lineData?.pictureUrl}</p>
   //   </div>
   // );
+
+  return (
+    <div className="fixed inset-0 z-9999 m-auto h-full w-full bg-white/50 overflow-visible">
+      <Loading />
+    </div>
+  );
 }
