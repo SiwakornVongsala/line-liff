@@ -15,14 +15,22 @@ export const toLineAppDeepLink = (liffId: string, search: string): string => {
 };
 
 /**
- * iOS + Safari จริงๆ (ไม่ใช่ Chrome iOS / Edge iOS / in-app browser ของ LINE)
- * ทุกเบราว์เซอร์บน iOS มีคำว่า Safari ใน UA เลยต้องตัด CriOS/EdgiOS/Line ออก
+ * iOS/iPadOS + Safari จริงๆ (ไม่ใช่ Chrome iOS / Edge iOS / Firefox iOS / in-app browser ของ LINE)
+ * ทุกเบราว์เซอร์บน iOS มีคำว่า Safari ใน UA เลยต้องตัด CriOS/EdgiOS/FxiOS/Line ออก
+ *
+ * iPad ตั้งแต่ iPadOS 13 เปิด "ขอเว็บไซต์เวอร์ชันเดสก์ท็อป" เป็นค่า default
+ * UA เลยเป็น Macintosh เป๊ะๆ ไม่มีคำว่า iPad → แยกจาก Mac จริงด้วย maxTouchPoints
+ * (Mac = 0, iPad = 5)
  *
  * ponytail: ตัด window.MSStream ทิ้ง — Windows Phone ตายแล้ว
  */
 export const isIosSafari = (
   ua: string = typeof navigator === "undefined" ? "" : navigator.userAgent,
+  maxTouchPoints: number = typeof navigator === "undefined"
+    ? 0
+    : navigator.maxTouchPoints,
 ): boolean =>
-  /iPad|iPhone|iPod/.test(ua) &&
   /Safari/i.test(ua) &&
-  !/CriOS|EdgiOS|Line/i.test(ua);
+  !/CriOS|EdgiOS|FxiOS|Line/i.test(ua) &&
+  (/iPad|iPhone|iPod/.test(ua) ||
+    (/Macintosh/.test(ua) && maxTouchPoints > 1));

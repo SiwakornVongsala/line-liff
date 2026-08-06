@@ -14,6 +14,7 @@ type Debug = {
   href: string;
   liffId: string;
   isIosSafari: boolean;
+  maxTouchPoints: number;
   isInClient: boolean | string;
   os: string;
   isLoggedIn: boolean | string;
@@ -47,6 +48,7 @@ export default function HomeClient() {
           href,
           liffId,
           isIosSafari: safari,
+          maxTouchPoints: navigator.maxTouchPoints,
           isInClient: "-",
           os: "-",
           isLoggedIn: "-",
@@ -92,6 +94,7 @@ export default function HomeClient() {
           href,
           liffId,
           isIosSafari: safari,
+          maxTouchPoints: navigator.maxTouchPoints,
           isInClient: inClient,
           os,
           isLoggedIn: loggedIn,

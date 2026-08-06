@@ -65,3 +65,17 @@ test("isIosSafari แยก Safari iOS ออกจากเบราว์เ�
     false,
   );
 });
+
+test("iPadOS โหมด desktop (UA = Macintosh) ต้องยังจับได้", () => {
+  // iPadOS 13+ default เป็น "ขอเว็บไซต์เวอร์ชันเดสก์ท็อป" → UA ไม่มีคำว่า iPad
+  const ipadUa =
+    "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.5 Safari/605.1.15";
+
+  assert.equal(isIosSafari(ipadUa, 5), true); // iPad
+  assert.equal(isIosSafari(ipadUa, 0), false); // Mac จริง
+  // iPad ที่เปิด Chrome ในโหมด desktop ก็ยังไม่ใช่ Safari
+  assert.equal(
+    isIosSafari(ipadUa.replace("Version/17.5", "CriOS/126.0"), 5),
+    false,
+  );
+});
