@@ -6,7 +6,7 @@ import FancySpinner from "../Loading/loading";
 import { isIosSafari, toLineAppDeepLink } from "@/app/lib/liff";
 
 // ponytail: สวิตช์เดียว — เทสบน vercel เสร็จแล้วเปลี่ยนเป็น false ก่อนขึ้น prod
-const DEBUG = true;
+const DEBUG = false;
 
 type Debug = {
   branch: "safari-ios" | "mobile-other" | "in-client" | "web";
